@@ -1,7 +1,7 @@
 /*
 skycoin daemon
 */
-package main
+package commands
 
 /*
 CODE GENERATED AUTOMATICALLY WITH FIBER COIN CREATOR
@@ -9,10 +9,12 @@ AVOID EDITING THIS MANUALLY
 */
 
 import (
+	"fmt"
 	"flag"
 	_ "net/http/pprof"
 	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/skycoin/skycoin/src/fiber"
 	"github.com/skycoin/skycoin/src/readable"
 	"github.com/skycoin/skycoin/src/skycoin"
@@ -101,31 +103,68 @@ var (
 
 func init() {
 	nodeConfig.RegisterFlags()
+	syncFlagsWithCobra(RootCmd)
+	RootCmd.AddCommand(helpCmd)
 }
 
-func main() {
-	if parseFlags {
-		flag.Parse()
-	}
+// RootCmd is the root command
+var RootCmd = &cobra.Command{
+	Use:     "{{.CoinName}}",
+	Short:   "{{.CoinName}} wallet",
+	Long: `
+{{.CoinAscii}}
+	{{.CoinName}} wallet`,
+	Run:  func(cmd *cobra.Command, args []string) {
+		if parseFlags {
+			flag.Parse()
+		}
 
-	// create a new fiber coin instance
-	coin := skycoin.NewCoin(skycoin.Config{
-		Node: nodeConfig,
-		Build: readable.BuildInfo{
-			Version: Version,
-			Commit:  Commit,
-			Branch:  Branch,
+		// create a new fiber coin instance
+		coin := skycoin.NewCoin(skycoin.Config{
+			Node: nodeConfig,
+			Build: readable.BuildInfo{
+				Version: Version,
+				Commit:  Commit,
+				Branch:  Branch,
+			},
+		}, logger)
+
+		// parse config values
+		if err := coin.ParseConfig(); err != nil {
+			logger.Error(err)
+			os.Exit(1)
+		}
+
+		// run fiber coin node
+		if err := coin.Run(); err != nil {
+			os.Exit(1)
+		}
 		},
-	}, logger)
+}
 
-	// parse config values
-	if err := coin.ParseConfig(); err != nil {
-		logger.Error(err)
-		os.Exit(1)
-	}
+// syncFlagsWithCobra transfers all `flag` package flags to Cobra.
+func syncFlagsWithCobra(cmd *cobra.Command) {
+	flag.CommandLine.VisitAll(func(f *flag.Flag) {
+		// Add each `flag` as a Cobra flag with the same properties
+		cmd.Flags().AddGoFlag(f)
+	})
+}
 
-	// run fiber coin node
-	if err := coin.Run(); err != nil {
-		os.Exit(1)
-	}
+// helpCmd is a custom command to display `flag` and `cobra`-based flags
+var helpCmd = &cobra.Command{
+	Use:   "help",
+	Short: "Show help",
+	Run: func(cmd *cobra.Command, args []string) {
+		// Print Cobra help
+		fmt.Println("Cobra Flags:")
+		cmd.Root().Help()
+
+		// Print `flag`-based flags
+		fmt.Println("\nGo Flag Package Flags:")
+		flag.CommandLine.PrintDefaults()
+	},
+}
+
+func init() {
+	// Add custom help command to RootCmd
 }
