@@ -9,7 +9,6 @@ AVOID EDITING THIS MANUALLY
 */
 
 import (
-	"fmt"
 	"flag"
 	_ "net/http/pprof"
 	"os"
@@ -29,7 +28,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.27.1"
+	Version = "0.28.0"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -103,9 +102,23 @@ var (
 
 func init() {
 	nodeConfig.RegisterFlags()
-	syncFlagsWithCobra(RootCmd)
+
+	if parseFlags {
+		flag.Parse()
+	}
+	os.Args = os.Args[:1]
+
+// alternative method of syncing flags
+//	syncFlagsWithCobra(RootCmd)
+
 	RootCmd.AddCommand(helpCmd)
+	RootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+	// No-op: Prevent cobra from parsing arguments.
 }
+
+RootCmd.Args = cobra.NoArgs
+}
+
 
 // RootCmd is the root command
 var RootCmd = &cobra.Command{
@@ -114,11 +127,8 @@ var RootCmd = &cobra.Command{
 	Long: `
 {{.CoinAscii}}
 	{{.CoinName}} wallet`,
+	DisableFlagParsing: true,
 	Run:  func(cmd *cobra.Command, args []string) {
-		if parseFlags {
-			flag.Parse()
-		}
-
 		// create a new fiber coin instance
 		coin := skycoin.NewCoin(skycoin.Config{
 			Node: nodeConfig,
@@ -142,29 +152,20 @@ var RootCmd = &cobra.Command{
 		},
 }
 
-// syncFlagsWithCobra transfers all `flag` package flags to Cobra.
+/*
+// alternative method of syncing flags
 func syncFlagsWithCobra(cmd *cobra.Command) {
 	flag.CommandLine.VisitAll(func(f *flag.Flag) {
 		// Add each `flag` as a Cobra flag with the same properties
 		cmd.Flags().AddGoFlag(f)
 	})
 }
-
+*/
 // helpCmd is a custom command to display `flag` and `cobra`-based flags
 var helpCmd = &cobra.Command{
 	Use:   "help",
 	Short: "Show help",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Print Cobra help
-		fmt.Println("Cobra Flags:")
-		cmd.Root().Help()
-
-		// Print `flag`-based flags
-		fmt.Println("\nGo Flag Package Flags:")
 		flag.CommandLine.PrintDefaults()
 	},
-}
-
-func init() {
-	// Add custom help command to RootCmd
 }

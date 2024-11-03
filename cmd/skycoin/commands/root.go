@@ -28,7 +28,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.27.1"
+	Version = "0.28.0"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -112,7 +112,7 @@ func init() {
 	}
 	os.Args = os.Args[:1]
 
-// displays correctly but wallet errors on invalid public key length with xpub key wallets
+// alternative method of syncing flags
 //	syncFlagsWithCobra(RootCmd)
 
 	RootCmd.AddCommand(helpCmd)
@@ -123,6 +123,7 @@ func init() {
 RootCmd.Args = cobra.NoArgs
 }
 
+
 // RootCmd is the root command
 var RootCmd = &cobra.Command{
 	Use:     "skycoin",
@@ -132,7 +133,6 @@ var RootCmd = &cobra.Command{
 └─┐├┴┐└┬┘│  │ │││││
 └─┘┴ ┴ ┴ └─┘└─┘┴┘└┘
 	skycoin wallet`,
-	// Disable `cobra`'s default argument parsing
 	DisableFlagParsing: true,
 	Run:  func(cmd *cobra.Command, args []string) {
 		// create a new fiber coin instance
@@ -159,7 +159,7 @@ var RootCmd = &cobra.Command{
 }
 
 /*
-// syncFlagsWithCobra transfers all `flag` package flags to Cobra.
+// alternative method of syncing flags
 func syncFlagsWithCobra(cmd *cobra.Command) {
 	flag.CommandLine.VisitAll(func(f *flag.Flag) {
 		// Add each `flag` as a Cobra flag with the same properties
