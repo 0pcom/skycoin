@@ -7,8 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/skycoin/skycoin/src/cipher/bip39"
 	"github.com/stretchr/testify/require"
+
+	"github.com/skycoin/skycoin/src/cipher/bip39"
 )
 
 type fakeWalletForGuardView struct {

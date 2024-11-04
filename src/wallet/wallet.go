@@ -7,7 +7,9 @@ or by loading from `[]byte` that containing wallet data of type such as
 type of wallet requires the prior registration of a loader. Registration is typically
 automatic as a side effect of initializing that wallet's package so that, to load a
 "deterministic" wallet, it suffices to have
+
 	import _ "github.com/skycoin/skycoin/src/wallet/deterministic"
+
 in a program's main package. The _ means to import a package purely for its
 initialization side effects.
 */

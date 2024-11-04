@@ -52,7 +52,8 @@ type Sha256Xor struct{}
 // 2> SHA256(<length(4 bytes)><data><padding>) and prefix the hash. <hash(32 bytes)><length(4 bytes)><data><padding>
 // 3> Split the whole data(hash+length+data+padding) into 256 bits(32 bytes) blocks
 // 4> Each block is encrypted by XORing the unencrypted block with SHA256(SHA256(password), SHA256(index, SHA256(nonce))
-// 	  - index is 0 for the first block of 32 bytes, 1 for the second block of 32 bytes, 2 for third block
+//   - index is 0 for the first block of 32 bytes, 1 for the second block of 32 bytes, 2 for third block
+//
 // 5> Prefix nonce and SHA256 the nonce with blocks to get checksum, and prefix the checksum
 // 6> Finally, the data format is: base64(<checksum(32 bytes)><nonce(32 bytes)><block0.Hex(), block1.Hex()...>)
 func (s Sha256Xor) Encrypt(data []byte, password []byte) ([]byte, error) {

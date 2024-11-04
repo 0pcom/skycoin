@@ -23,7 +23,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-
 	"github.com/skycoin/skycoin/cmd/monitor-peers/connection"
 	"github.com/skycoin/skycoin/src/cipher"
 	"github.com/skycoin/skycoin/src/daemon"
@@ -39,22 +38,22 @@ const (
 	// and successfully parsed
 	StateSentIntroduction = "introduced"
 	// StateUnreachable is set when a peer couldn't be reached
-	StateUnreachable       PeerState = "unreachable"
+	StateUnreachable PeerState = "unreachable"
 	// StateReachable is set when a connection to the peer was successful
-	StateReachable         PeerState = "reachable"
-	blockchainPubKey                 = "0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a"
-	defaultConnectTimeout            = "1s"
-	defaultReadTimeout               = "1s"
-	defaultPeersFile                 = "peers.txt"
-	addrWidth                        = "25"
-	stateWidth                       = "15"
-	uaCoinWidth                      = "10"
-	uaVersionWidth                   = "10"
-	uaRemarkWidth                    = "10"
-	verifyTxBurnFactorWidth          = "10"
-	verifyTxMaxTxSizeWidth           = "10"
-	verifyTxMaxDropletPrecisionWidth = "20"
-	reportFormat                     = "%-" + addrWidth + "s\t%-" + stateWidth + "s\t%-" + uaCoinWidth + "s\t%-" +
+	StateReachable                   PeerState = "reachable"
+	blockchainPubKey                           = "0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a"
+	defaultConnectTimeout                      = "1s"
+	defaultReadTimeout                         = "1s"
+	defaultPeersFile                           = "peers.txt"
+	addrWidth                                  = "25"
+	stateWidth                                 = "15"
+	uaCoinWidth                                = "10"
+	uaVersionWidth                             = "10"
+	uaRemarkWidth                              = "10"
+	verifyTxBurnFactorWidth                    = "10"
+	verifyTxMaxTxSizeWidth                     = "10"
+	verifyTxMaxDropletPrecisionWidth           = "20"
+	reportFormat                               = "%-" + addrWidth + "s\t%-" + stateWidth + "s\t%-" + uaCoinWidth + "s\t%-" +
 		uaVersionWidth + "s\t%-" + uaRemarkWidth + "s\t%-" + verifyTxBurnFactorWidth + "s\t%-" +
 		verifyTxMaxTxSizeWidth + "s\t%-" + verifyTxMaxDropletPrecisionWidth + "s\t%v\n"
 )
@@ -70,15 +69,13 @@ type ReportEntry struct {
 	IntroValidationErr error
 }
 
-
 var (
-	logger = logging.MustGetLogger("monitor-peers")
+	logger           = logging.MustGetLogger("monitor-peers")
 	whitespaceFilter = regexp.MustCompile(`\s`)
 	peersFile        string
 	connectTimeout   string
 	readTimeout      string
 )
-
 
 func init() {
 	RootCmd.Flags().StringVarP(&peersFile, "file", "f", defaultPeersFile, "File containing peer addresses")
@@ -89,7 +86,7 @@ func init() {
 var RootCmd = &cobra.Command{
 	Use:   "monitor-peers",
 	Short: "check the status of network peers.",
-	Long:  `
+	Long: `
 	┌┬┐┌─┐┌┐┌┬┌┬┐┌─┐┬─┐   ┌─┐┌─┐┌─┐┬─┐┌─┐
 	││││ │││││ │ │ │├┬┘───├─┘├┤ ├┤ ├┬┘└─┐
 	┴ ┴└─┘┘└┘┴ ┴ └─┘┴└─   ┴  └─┘└─┘┴└─└─┘
@@ -108,7 +105,7 @@ Connection made, no introduction message received.
 - introduced
 Connection made, introduction message received.
 `,
-	Run:   func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, args []string) {
 		connectDuration, err := time.ParseDuration(connectTimeout)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Bad connect timeout:", connectTimeout)
@@ -134,9 +131,6 @@ Connection made, introduction message received.
 		fmt.Println(buildReport(report))
 	},
 }
-
-
-
 
 func (re ReportEntry) String() string {
 	uaCoin := "-"
@@ -184,8 +178,6 @@ func (r Report) Append(addr string, state PeerState, introduction *daemon.Introd
 
 	return append(r, entry)
 }
-
-
 
 func main() {
 	peersFile := flag.String("f", defaultPeersFile, "file containing peers")

@@ -13,11 +13,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/skycoin/skycoin/src/transaction"
-	"github.com/skycoin/skycoin/src/wallet"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	"github.com/skycoin/skycoin/src/transaction"
+	"github.com/skycoin/skycoin/src/wallet"
 
 	"github.com/skycoin/skycoin/src/cipher"
 	"github.com/skycoin/skycoin/src/coin"

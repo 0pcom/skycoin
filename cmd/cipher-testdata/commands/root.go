@@ -55,7 +55,7 @@ var RootCmd = &cobra.Command{
 cipher-testdata generates test data to verify the behavior of the cipher library.
 Outputs are saved in specified files within the output directory.
 
-`+fmt.Sprintf(`cipher-testdata generates testdata to be used by the cipher test suite in src/cipher/testsuite.
+` + fmt.Sprintf(`cipher-testdata generates testdata to be used by the cipher test suite in src/cipher/testsuite.
 
 A file named %s will be generated,
 which contains a list of hex-encoded hashes to sign.
@@ -127,7 +127,6 @@ type job struct {
 	seed         []byte
 	addressCount int
 }
-
 
 func createJobs(seedsCount, addressCount int) []job {
 	jobs := make([]job, 0, seedsCount+1)

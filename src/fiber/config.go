@@ -78,9 +78,9 @@ type NodeConfig struct {
 	Bip44Coin bip44.CoinType `mapstructure:"bip44_coin"`
 
 	// These fields are set by cmd/newcoin and are not configured in the fiber.toml file
-	CoinName      string
+	CoinName string
 	// Ascii Font rendering of CoinName
-	CoinAscii      string
+	CoinAscii     string
 	DataDirectory string
 }
 

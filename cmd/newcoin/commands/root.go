@@ -6,10 +6,10 @@ package commands
 
 import (
 	"fmt"
-	"strings"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"text/template"
 
 	"github.com/spf13/cobra"
@@ -25,15 +25,15 @@ const (
 )
 
 var (
-	log             = logging.MustGetLogger("newcoin")
-	coinName        string
-	templateDir     string
-	coinTemplateFile string
-	commandTemplateFile string
+	log                  = logging.MustGetLogger("newcoin")
+	coinName             string
+	templateDir          string
+	coinTemplateFile     string
+	commandTemplateFile  string
 	coinTestTemplateFile string
-	paramsTemplateFile string
-	configDir       string
-	configFile      string
+	paramsTemplateFile   string
+	configDir            string
+	configFile           string
 )
 
 func init() {
@@ -48,10 +48,11 @@ func init() {
 	createCoinCmd.Flags().StringVarP(&configFile, "config-file", "k", "fiber.toml", "config file path")
 	RootCmd.AddCommand(createCoinCmd)
 }
+
 // rootCmd represents the base command for the application
 var RootCmd = &cobra.Command{
-	Use:     "newcoin",
-	Short:   "newcoin is a helper tool for creating new fiber coins",
+	Use:   "newcoin",
+	Short: "newcoin is a helper tool for creating new fiber coins",
 	Long: `
 	┌┐┌┌─┐┬ ┬┌─┐┌─┐┬┌┐┌
 	│││├┤ ││││  │ │││││
@@ -62,7 +63,7 @@ newcoin is a helper tool for creating new fiber coins`,
 var createCoinCmd = &cobra.Command{
 	Use:   "createcoin",
 	Short: "Create a new coin from a template file",
-	RunE:  func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := validateCoinName(coinName); err != nil {
 			return err
 		}
@@ -172,7 +173,6 @@ var createCoinCmd = &cobra.Command{
 	},
 }
 
-
 func validateCoinName(s string) error {
 	x := regexp.MustCompile(fmt.Sprintf(`^%s$`, useragent.NamePattern))
 	if !x.MatchString(s) {
@@ -182,35 +182,33 @@ func validateCoinName(s string) error {
 }
 
 var boxFont = map[rune][]string{
-'a': {"┌─┐", "├─┤", "┴ ┴"},
-'b': {"┌┐ ", "├┴┐", "└─┘"},
-'c': {"┌─┐", "│  ", "└─┘"},
-'d': {"┌┬┐", " ││", "─┴┘"},
-'e': {"┌─┐", "├┤ ", "└─┘"},
-'f': {"┌─┐", "├┤ ", "└  "},
-'g': {"┌─┐", "│ ┬", "└─┘"},
-'h': {"┬ ┬", "├─┤", "┴ ┴"},
-'i': {"┬", "│", "┴"},
-'j': {" ┬", " │", "└┘"},
-'k': {"┬┌─", "├┴┐", "┴ ┴"},
-'l': {"┬  ", "│  ", "┴─┘"},
-'m': {"┌┬┐", "│││", "┴ ┴"},
-'n': {"┌┐┌", "│││", "┘└┘"},
-'o': {"┌─┐", "│ │", "└─┘"},
-'p': {"┌─┐", "├─┘", "┴  "},
-'q': {"┌─┐ ", "│─┼┐", "└─┘└"},
-'r': {"┬─┐", "├┬┘", "┴└─"},
-'s': {"┌─┐", "└─┐", "└─┘"},
-'t': {"┌┬┐", " │ ", " ┴ "},
-'u': {"┬ ┬", "│ │", "└─┘"},
-'v': {"┬  ┬", "└┐┌┘", " └┘ "},
-'w': {"┬ ┬", "│││", "└┴┘"},
-'x': {"─┐ ┬", "┌┴┬┘", "┴ └─"},
-'y': {"┬ ┬", "└┬┘", " ┴ "},
-'z': {"┌─┐", "┌─┘", "└─┘"},
+	'a': {"┌─┐", "├─┤", "┴ ┴"},
+	'b': {"┌┐ ", "├┴┐", "└─┘"},
+	'c': {"┌─┐", "│  ", "└─┘"},
+	'd': {"┌┬┐", " ││", "─┴┘"},
+	'e': {"┌─┐", "├┤ ", "└─┘"},
+	'f': {"┌─┐", "├┤ ", "└  "},
+	'g': {"┌─┐", "│ ┬", "└─┘"},
+	'h': {"┬ ┬", "├─┤", "┴ ┴"},
+	'i': {"┬", "│", "┴"},
+	'j': {" ┬", " │", "└┘"},
+	'k': {"┬┌─", "├┴┐", "┴ ┴"},
+	'l': {"┬  ", "│  ", "┴─┘"},
+	'm': {"┌┬┐", "│││", "┴ ┴"},
+	'n': {"┌┐┌", "│││", "┘└┘"},
+	'o': {"┌─┐", "│ │", "└─┘"},
+	'p': {"┌─┐", "├─┘", "┴  "},
+	'q': {"┌─┐ ", "│─┼┐", "└─┘└"},
+	'r': {"┬─┐", "├┬┘", "┴└─"},
+	's': {"┌─┐", "└─┐", "└─┘"},
+	't': {"┌┬┐", " │ ", " ┴ "},
+	'u': {"┬ ┬", "│ │", "└─┘"},
+	'v': {"┬  ┬", "└┐┌┘", " └┘ "},
+	'w': {"┬ ┬", "│││", "└┴┘"},
+	'x': {"─┐ ┬", "┌┴┬┘", "┴ └─"},
+	'y': {"┬ ┬", "└┬┘", " ┴ "},
+	'z': {"┌─┐", "┌─┘", "└─┘"},
 }
-
-
 
 // ConvertToBoxFont converts a lowercase string to box drawing characters.
 func asciiFont(input string) string {
@@ -226,7 +224,6 @@ func asciiFont(input string) string {
 
 	return strings.Join(output[:], "\n")
 }
-
 
 const helpTemplate = `
 const help = "{{if .HasAvailableSubCommands}}{{end}} {{if gt (len .Aliases) 0}}\r\n\r\n" +

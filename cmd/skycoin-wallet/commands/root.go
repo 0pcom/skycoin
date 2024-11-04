@@ -4,16 +4,19 @@ skycoin daemon, cli, & newcoin
 package commands
 
 import (
-	"log"
 	"fmt"
+	"log"
 	"os"
-	"strings"
 	"path/filepath"
+	"strings"
+
 	"github.com/spf13/cobra"
-	skycoin	"github.com/skycoin/skycoin/cmd/skycoin/commands"
-	cli	"github.com/skycoin/skycoin/cmd/skycoin-cli/commands"
-	newcoin	"github.com/skycoin/skycoin/cmd/newcoin/commands"
+
+	newcoin "github.com/skycoin/skycoin/cmd/newcoin/commands"
+	cli "github.com/skycoin/skycoin/cmd/skycoin-cli/commands"
+	skycoin "github.com/skycoin/skycoin/cmd/skycoin/commands"
 )
+
 func init() {
 
 	RootCmd.AddCommand(
@@ -21,7 +24,7 @@ func init() {
 		cli.RootCmd,
 		newcoin.RootCmd,
 	)
-	skycoin.RootCmd.Use="daemon"
+	skycoin.RootCmd.Use = "daemon"
 }
 
 // RootCmd contains every daemon, cli, & newcoin

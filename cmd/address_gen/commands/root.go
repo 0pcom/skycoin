@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
 	"github.com/skycoin/skycoin/src/cipher"
 	"github.com/skycoin/skycoin/src/cipher/bip39"
 	"github.com/skycoin/skycoin/src/util/logging"
@@ -17,13 +18,13 @@ import (
 )
 
 var (
-	genCount     int
-	isBitcoin    bool
-	hexSeed      bool
-	hideSecrets  bool
-	seed         string
-	secKeysList  bool
-	addrsList    bool
+	genCount    int
+	isBitcoin   bool
+	hexSeed     bool
+	hideSecrets bool
+	seed        string
+	secKeysList bool
+	addrsList   bool
 )
 
 func init() {

@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+
 	"github.com/skycoin/skycoin/src/transaction"
 
 	"github.com/skycoin/skycoin/src/cipher"

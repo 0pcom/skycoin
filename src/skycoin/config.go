@@ -2,10 +2,11 @@ package skycoin
 
 import (
 	"errors"
-//	"flag"
+	//	"flag"
 	"fmt"
 	"math"
-//	"os"
+
+	//	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -357,10 +358,10 @@ func NewNodeConfig(mode string, node fiber.NodeConfig) NodeConfig {
 }
 
 func (c *Config) postProcess() error {
-//	if help {
-//		flag.Usage()
-//		os.Exit(0)
-//	}
+	//	if help {
+	//		flag.Usage()
+	//		os.Exit(0)
+	//	}
 
 	var err error
 	if c.Node.GenesisSignatureStr != "" {
@@ -647,7 +648,7 @@ func validateAPISets(opt string, apiSets []string) error {
 
 // RegisterFlags binds CLI flags to config values using Cobra
 func (c *NodeConfig) RegisterFlags(cmd *cobra.Command) {
-//	cmd.Flags().BoolVar(&help, "help", false, "Show help")
+	//	cmd.Flags().BoolVar(&help, "help", false, "Show help")
 	cmd.Flags().BoolVar(&c.DisablePEX, "disable-pex", c.DisablePEX, "disable PEX peer discovery")
 	cmd.Flags().BoolVar(&c.DownloadPeerList, "download-peerlist", c.DownloadPeerList, "download a peers.txt from -peerlist-url")
 	cmd.Flags().StringVar(&c.PeerListURL, "peerlist-url", c.PeerListURL, "with -download-peerlist=true, download a peers.txt file from this url")
@@ -739,7 +740,6 @@ func (c *NodeConfig) RegisterFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&c.WalletCryptoType, "wallet-crypto-type", c.WalletCryptoType, "wallet crypto type. Can be sha256-xor or scrypt-chacha20poly1305")
 	cmd.Flags().BoolVar(&c.Version, "version", false, "show node version")
 }
-
 
 func (c *NodeConfig) applyConfigMode(configMode string) {
 	if runtime.GOOS == "windows" {

@@ -15,14 +15,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-
 	// register the supported wallets
 	_ "github.com/skycoin/skycoin/src/wallet/bip44wallet"
 	_ "github.com/skycoin/skycoin/src/wallet/collection"
 	_ "github.com/skycoin/skycoin/src/wallet/deterministic"
 	_ "github.com/skycoin/skycoin/src/wallet/xpubwallet"
 )
-
 
 func init() {
 	logging.SetLevel(logrus.WarnLevel)
@@ -37,19 +35,20 @@ func init() {
 		os.Exit(1)
 	}
 	RootCmd = skyCLI
-	RootCmd.Use="cli"
-	RootCmd.Short="The skycoin command line interface"
-	RootCmd.Long=`
+	RootCmd.Use = "cli"
+	RootCmd.Short = "The skycoin command line interface"
+	RootCmd.Long = `
 	┌─┐┬┌─┬ ┬┌─┐┌─┐┬┌┐┌   ┌─┐┬  ┬
 	└─┐├┴┐└┬┘│  │ │││││───│  │  │
 	└─┘┴ ┴ ┴ └─┘└─┘┴┘└┘   └─┘┴─┘┴
 The skycoin command line interface`
 
 }
+
 // RootCmd represents the base command for the application
 var RootCmd = &cobra.Command{
-	Use:     "cli",
-	Short:   "The skycoin command line interface",
+	Use:   "cli",
+	Short: "The skycoin command line interface",
 	Long: `
 	┌─┐┬┌─┬ ┬┌─┐┌─┐┬┌┐┌   ┌─┐┬  ┬
 	└─┐├┴┐└┬┘│  │ │││││───│  │  │
