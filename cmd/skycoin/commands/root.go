@@ -9,7 +9,6 @@ AVOID EDITING THIS MANUALLY
 */
 
 import (
-	"flag"
 	_ "net/http/pprof"
 	"os"
 
@@ -101,28 +100,11 @@ var (
 		Bip44Coin:             8000,
 	})
 
-	parseFlags = true
 )
 
 func init() {
-	nodeConfig.RegisterFlags()
-
-	if parseFlags {
-		flag.Parse()
-	}
-	os.Args = os.Args[:1]
-
-// alternative method of syncing flags
-//	syncFlagsWithCobra(RootCmd)
-
-	RootCmd.AddCommand(helpCmd)
-	RootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-	// No-op: Prevent cobra from parsing arguments.
+	nodeConfig.RegisterFlags(RootCmd)
 }
-
-RootCmd.Args = cobra.NoArgs
-}
-
 
 // RootCmd is the root command
 var RootCmd = &cobra.Command{
@@ -133,7 +115,6 @@ var RootCmd = &cobra.Command{
 └─┐├┴┐└┬┘│  │ │││││
 └─┘┴ ┴ ┴ └─┘└─┘┴┘└┘
 	skycoin wallet`,
-	DisableFlagParsing: true,
 	Run:  func(cmd *cobra.Command, args []string) {
 		// create a new fiber coin instance
 		coin := skycoin.NewCoin(skycoin.Config{
@@ -156,22 +137,4 @@ var RootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		},
-}
-
-/*
-// alternative method of syncing flags
-func syncFlagsWithCobra(cmd *cobra.Command) {
-	flag.CommandLine.VisitAll(func(f *flag.Flag) {
-		// Add each `flag` as a Cobra flag with the same properties
-		cmd.Flags().AddGoFlag(f)
-	})
-}
-*/
-// helpCmd is a custom command to display `flag` and `cobra`-based flags
-var helpCmd = &cobra.Command{
-	Use:   "help",
-	Short: "Show help",
-	Run: func(cmd *cobra.Command, args []string) {
-		flag.CommandLine.PrintDefaults()
-	},
 }
