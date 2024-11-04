@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/skycoin/skycoin/src/wallet"
 	"github.com/spf13/cobra"
+
+	"github.com/skycoin/skycoin/src/wallet"
 )
 
 func walletScanAddressesCmd() *cobra.Command {

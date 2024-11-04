@@ -28,7 +28,7 @@ func randBytes(t *testing.T, n uint64) []byte { //nolint:unparam
 	return bytes
 }
 
-//Size of= 13
+// Size of= 13
 type TestStruct struct {
 	X int32
 	Y int64

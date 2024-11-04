@@ -1,7 +1,7 @@
 /*
 skycoin daemon
 */
-package main
+package commands
 
 /*
 CODE GENERATED AUTOMATICALLY WITH FIBER COIN CREATOR
@@ -9,10 +9,10 @@ AVOID EDITING THIS MANUALLY
 */
 
 import (
-	"flag"
 	_ "net/http/pprof"
 	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/skycoin/skycoin/src/fiber"
 	"github.com/skycoin/skycoin/src/readable"
 	"github.com/skycoin/skycoin/src/skycoin"
@@ -27,7 +27,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.27.1"
+	Version = "0.28.0"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -96,36 +96,39 @@ var (
 		Bip44Coin:             {{.Bip44Coin}},
 	})
 
-	parseFlags = true
 )
 
 func init() {
-	nodeConfig.RegisterFlags()
+	nodeConfig.RegisterFlags(RootCmd)
 }
 
-func main() {
-	if parseFlags {
-		flag.Parse()
-	}
+// RootCmd is the root command
+var RootCmd = &cobra.Command{
+	Use:     "{{.CoinName}}",
+	Short:   "{{.CoinName}} wallet",
+	Long: `
+{{.CoinAscii}}
+	{{.CoinName}} wallet`,
+	Run:  func(cmd *cobra.Command, args []string) {
+		// create a new fiber coin instance
+		coin := skycoin.NewCoin(skycoin.Config{
+			Node: nodeConfig,
+			Build: readable.BuildInfo{
+				Version: Version,
+				Commit:  Commit,
+				Branch:  Branch,
+			},
+		}, logger)
 
-	// create a new fiber coin instance
-	coin := skycoin.NewCoin(skycoin.Config{
-		Node: nodeConfig,
-		Build: readable.BuildInfo{
-			Version: Version,
-			Commit:  Commit,
-			Branch:  Branch,
+		// parse config values
+		if err := coin.ParseConfig(); err != nil {
+			logger.Error(err)
+			os.Exit(1)
+		}
+
+		// run fiber coin node
+		if err := coin.Run(); err != nil {
+			os.Exit(1)
+		}
 		},
-	}, logger)
-
-	// parse config values
-	if err := coin.ParseConfig(); err != nil {
-		logger.Error(err)
-		os.Exit(1)
-	}
-
-	// run fiber coin node
-	if err := coin.Run(); err != nil {
-		os.Exit(1)
-	}
 }

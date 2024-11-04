@@ -105,7 +105,8 @@ func NewWalletResponse(w wallet.Wallet) (*WalletResponse, error) {
 // URI: /api/v1/wallet/balance
 // Method: GET
 // Args:
-//     id: wallet id [required]
+//
+//	id: wallet id [required]
 func walletBalanceHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
@@ -144,7 +145,8 @@ func walletBalanceHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1s/balance
 // Method: GET, POST
 // Args:
-//     addrs: command separated list of addresses [required]
+//
+//	addrs: command separated list of addresses [required]
 func balanceHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet && r.Method != http.MethodPost {
@@ -205,16 +207,17 @@ func balanceHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/create
 // Method: POST
 // Args:
-//     seed: wallet seed [required]
-//     seed-passphrase: wallet seed passphrase [optional, bip44 type wallet only]
-//     type: wallet type [required, one of "deterministic", "bip44" or "xpub"]
-//     bip44-coin: BIP44 coin type [optional, defaults to 8000 (skycoin's coin type), only valid if type is "bip44"]
-//     xpub: xpub key [required for xpub wallets]
-//     label: wallet label [required]
-//     scan: the number of addresses to scan ahead for balances [optional, must be > 0]
-//     encrypt: bool value, whether encrypt the wallet [optional]
-//     password: password for encrypting wallet [optional, must be provided if "encrypt" is set]
-//     private-keys: private keys for generating addresses for collection wallets.[optional, multiple keys must be joined with commas]
+//
+//	seed: wallet seed [required]
+//	seed-passphrase: wallet seed passphrase [optional, bip44 type wallet only]
+//	type: wallet type [required, one of "deterministic", "bip44" or "xpub"]
+//	bip44-coin: BIP44 coin type [optional, defaults to 8000 (skycoin's coin type), only valid if type is "bip44"]
+//	xpub: xpub key [required for xpub wallets]
+//	label: wallet label [required]
+//	scan: the number of addresses to scan ahead for balances [optional, must be > 0]
+//	encrypt: bool value, whether encrypt the wallet [optional]
+//	password: password for encrypting wallet [optional, must be provided if "encrypt" is set]
+//	private-keys: private keys for generating addresses for collection wallets.[optional, multiple keys must be joined with commas]
 func walletCreateHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -342,13 +345,14 @@ func walletCreateHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/createTemp
 // Method: POST
 // Args:
-//     seed: wallet seed [required]
-//     type: wallet type [required, one of "deterministic", "bip44" or "xpub"]
-//     bip44-coin: BIP44 coin type [optional, defaults to 8000 (skycoin's coin type), only valid if type is "bip44"]
-//     xpub: xpub key [required for xpub wallets]
-//     label: wallet label [required]
-//     scan: the number of addresses to scan ahead for balances [optional, must be > 0]
-//     private-keys: private keys for generating addresses for collection wallets.[optional, multiple keys must be joined with commas]
+//
+//	seed: wallet seed [required]
+//	type: wallet type [required, one of "deterministic", "bip44" or "xpub"]
+//	bip44-coin: BIP44 coin type [optional, defaults to 8000 (skycoin's coin type), only valid if type is "bip44"]
+//	xpub: xpub key [required for xpub wallets]
+//	label: wallet label [required]
+//	scan: the number of addresses to scan ahead for balances [optional, must be > 0]
+//	private-keys: private keys for generating addresses for collection wallets.[optional, multiple keys must be joined with commas]
 func walletCreateTempHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -446,9 +450,10 @@ func walletCreateTempHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/newAddress
 // Method: POST
 // Args:
-//     id: wallet id [required]
-//     num: number of address need to create [optional, if not set the default value is 1]
-//     password: wallet password [optional, must be provided if the wallet is encrypted]
+//
+//	id: wallet id [required]
+//	num: number of address need to create [optional, if not set the default value is 1]
+//	password: wallet password [optional, must be provided if the wallet is encrypted]
 func walletNewAddressesHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -515,9 +520,10 @@ func walletNewAddressesHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/scan
 // Method: POST
 // Args:
-//     id: wallet id [required]
-//     num: the number of addresses to scan ahead for balance [optional, must be > 0, default to 20]
-//     password: wallet password [optional, must be provided is the wallet is encrypted]
+//
+//	id: wallet id [required]
+//	num: the number of addresses to scan ahead for balance [optional, must be > 0, default to 20]
+//	password: wallet password [optional, must be provided is the wallet is encrypted]
 func walletScanAddressesHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -579,8 +585,9 @@ func walletScanAddressesHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/update
 // Method: POST
 // Args:
-//     id: wallet id [required]
-//     label: the label the wallet will be updated to [required]
+//
+//	id: wallet id [required]
+//	label: the label the wallet will be updated to [required]
 func walletUpdateHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -623,7 +630,8 @@ func walletUpdateHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet
 // Method: GET
 // Args:
-//     id: wallet id [required]
+//
+//	id: wallet id [required]
 func walletHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
@@ -660,8 +668,9 @@ func walletHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/transactions
 // Method: GET
 // Args:
-//  id: wallet id [required]
-//  verbose: [bool] include verbose transaction input data
+//
+//	id: wallet id [required]
+//	verbose: [bool] include verbose transaction input data
 func walletTransactionsHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
@@ -811,7 +820,8 @@ func walletFolderHandler(s Walleter) http.HandlerFunc {
 // URI: /api/v1/wallet/newSeed
 // Method: GET
 // Args:
-//     entropy: entropy bitsize [optional, default value of 128 will be used if not set]
+//
+//	entropy: entropy bitsize [optional, default value of 128 will be used if not set]
 func newSeedHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
@@ -869,8 +879,9 @@ type WalletSeedResponse struct {
 // URI: /api/v1/wallet/seed
 // Method: POST
 // Args:
-//     id: wallet id
-//     password: wallet password
+//
+//	id: wallet id
+//	password: wallet password
 func walletSeedHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -956,7 +967,8 @@ func walletVerifySeedHandler(w http.ResponseWriter, r *http.Request) {
 // URI: /api/v1/wallet/unload
 // Method: POST
 // Args:
-//     id: wallet id
+//
+//	id: wallet id
 func walletUnloadHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -985,8 +997,9 @@ func walletUnloadHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/encrypt
 // Method: POST
 // Args:
-//     id: wallet id
-//     password: wallet password
+//
+//	id: wallet id
+//	password: wallet password
 func walletEncryptHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -1037,8 +1050,9 @@ func walletEncryptHandler(gateway Gatewayer) http.HandlerFunc {
 // URI: /api/v1/wallet/decrypt
 // Method: POST
 // Args:
-//     id: wallet id
-//     password: wallet password
+//
+//	id: wallet id
+//	password: wallet password
 func walletDecryptHandler(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -1094,9 +1108,11 @@ type WalletRecoverRequest struct {
 // URI: /api/v2/wallet/recover
 // Method: POST
 // Args:
-//  id: wallet id
-//  seed: wallet seed
-//  password: [optional] new password
+//
+//	id: wallet id
+//	seed: wallet seed
+//	password: [optional] new password
+//
 // Recovers an encrypted wallet by providing the seed.
 // The first address will be generated from seed and compared to the first address
 // of the specified wallet. If they match, the wallet will be regenerated

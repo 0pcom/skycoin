@@ -8,7 +8,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+
+	// "io/ioutil"
+	"io/fs"
 	"net"
 	"net/http"
 	"path/filepath"
@@ -17,8 +19,10 @@ import (
 	"unicode"
 
 	"github.com/rs/cors"
+
 	"github.com/skycoin/skycoin/src/util/gziphandler"
 
+	"github.com/skycoin/skycoin"
 	"github.com/skycoin/skycoin/src/cipher"
 	"github.com/skycoin/skycoin/src/readable"
 	"github.com/skycoin/skycoin/src/util/file"
@@ -180,6 +184,11 @@ func create(host string, c Config, gateway Gatewayer) (*Server, error) {
 		logger.Infof("Web resources directory: %s", appLoc)
 	}
 
+	//	var appHandler http.Handler
+	//	if c.EnableGUI {
+	//		appHandler = http.FileServer(http.FS(skycoin.GuiFiles))
+	//	}
+
 	if c.DisableCSRF {
 		logger.Warning("CSRF check disabled")
 	}
@@ -213,6 +222,11 @@ func create(host string, c Config, gateway Gatewayer) (*Server, error) {
 	}
 
 	srvMux := newServerMux(mc, gateway)
+
+	//	if c.EnableGUI {
+	//		srvMux.Handle("/", appHandler)
+	//	}
+
 	srv := &http.Server{
 		Handler:      srvMux,
 		ReadTimeout:  c.ReadTimeout,
@@ -440,25 +454,58 @@ func newServerMux(c muxConfig, gateway Gatewayer) *http.ServeMux {
 	}
 	webHandler(apiVersion1, "/", indexHandler, nil)
 
+	/*
+		if c.enableGUI {
+			fileInfos, err := ioutil.ReadDir(c.appLoc)
+			if err != nil {
+				logger.WithError(err).Panicf("ioutil.ReadDir(%s) failed", c.appLoc)
+			}
+
+			fs := http.FileServer(http.Dir(c.appLoc))
+			if !c.disableCSP {
+				fs = CSPHandler(fs, ContentSecurityPolicy)
+			}
+
+			for _, fileInfo := range fileInfos {
+				route := fmt.Sprintf("/%s", fileInfo.Name())
+				if fileInfo.IsDir() {
+					route = route + "/"
+				}
+
+				webHandler(apiVersion1, route, fs, nil)
+			}
+		}
+	*/
+
 	if c.enableGUI {
-		fileInfos, err := ioutil.ReadDir(c.appLoc)
+		// Use the embedded dist directory as the root for the file server
+		distDir, err := fs.Sub(skycoin.GuiFiles, "src/gui/static/dist")
 		if err != nil {
-			logger.WithError(err).Panicf("ioutil.ReadDir(%s) failed", c.appLoc)
+			logger.WithError(err).Panic("Failed to access embedded dist directory")
 		}
 
-		fs := http.FileServer(http.Dir(c.appLoc))
+		// Read files in the embedded dist directory
+		fileInfos, err := fs.ReadDir(distDir, ".")
+		if err != nil {
+			logger.WithError(err).Panic("Failed to read embedded dist directory")
+		}
+
+		// Create the file server from the embedded dist directory
+		fs := http.FileServer(http.FS(distDir))
 		if !c.disableCSP {
 			fs = CSPHandler(fs, ContentSecurityPolicy)
 		}
 
+		// Set up routes for each file and directory
 		for _, fileInfo := range fileInfos {
 			route := fmt.Sprintf("/%s", fileInfo.Name())
 			if fileInfo.IsDir() {
 				route = route + "/"
 			}
-
 			webHandler(apiVersion1, route, fs, nil)
 		}
+
+		logger.Infof("Serving embedded GUI from src/gui/static/dist/")
 	}
 
 	// get the current CSRF token

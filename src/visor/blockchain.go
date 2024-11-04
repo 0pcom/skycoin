@@ -532,8 +532,8 @@ func (bc Blockchain) GetLastBlocks(tx *dbutil.Tx, num uint64) ([]coin.SignedBloc
 // array, i.e. processTransactions(processTransactions(txn, false), true)
 // should not result in an error, unless all txns are invalid.
 // TODO:
-//  - move arbitration to visor
-//  - blockchain should have strict checking
+//   - move arbitration to visor
+//   - blockchain should have strict checking
 func (bc Blockchain) processTransactions(tx *dbutil.Tx, txs coin.Transactions) (coin.Transactions, error) {
 	// copy txs so that the following code won't modify the original txns
 	txns := make(coin.Transactions, len(txs))

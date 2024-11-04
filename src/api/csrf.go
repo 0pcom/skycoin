@@ -119,7 +119,8 @@ func verifyCSRFToken(headerToken string) error {
 // URI: /api/v1/csrf
 // Method: GET
 // Response:
-//  csrf_token: CSRF token to use in POST requests
+//
+//	csrf_token: CSRF token to use in POST requests
 func getCSRFToken(disabled bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
