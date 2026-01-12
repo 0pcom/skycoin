@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/skycoin/hardware-wallet-daemon/src/api"
-	"github.com/skycoin/hardware-wallet-daemon/src/daemon"
-	cli "github.com/skycoin/hardware-wallet-go/src/cli"
+	"github.com/skycoin/skycoin/src/hardware-wallet-daemon/api"
+	"github.com/skycoin/skycoin/src/hardware-wallet-daemon/daemon"
+	cli "github.com/skycoin/skycoin/src/hardware-wallet/cli"
 
 	"github.com/skycoin/skywire/pkg/skywire-utilities/pkg/buildinfo"
 
@@ -108,7 +108,7 @@ var RootCmd = &cobra.Command{
 		}
 		return ret
 	}(),
-	SilenceErrors:         true,
+	SilenceErrors:         false,
 	SilenceUsage:          true,
 	DisableSuggestions:    true,
 	DisableFlagsInUseLine: true,
