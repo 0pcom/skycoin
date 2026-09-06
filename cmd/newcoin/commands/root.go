@@ -8,9 +8,8 @@ import (
 	"regexp"
 	"text/template"
 
+	"github.com/0magnet/calvin"
 	"github.com/spf13/cobra"
-
-	"github.com/skycoin/skycoin/src/util/calvin"
 
 	"github.com/skycoin/skycoin/src/fiber"
 	"github.com/skycoin/skycoin/src/util/logging"

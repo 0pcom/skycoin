@@ -14,8 +14,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/0magnet/calvin"
+
 	"github.com/skycoin/skycoin/src/util/buildinfo"
-	"github.com/skycoin/skycoin/src/util/calvin"
 
 	explorer "github.com/skycoin/skycoin/cmd/explorer/commands"
 	newcoin "github.com/skycoin/skycoin/cmd/newcoin/commands"

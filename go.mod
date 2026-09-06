@@ -3,6 +3,7 @@ module github.com/skycoin/skycoin
 go 1.26.1
 
 require (
+	github.com/0magnet/calvin v0.0.0-20260905171945-6d046e156c9b
 	github.com/0magnet/coloredcobra v1.0.2
 	github.com/NYTimes/gziphandler v1.1.1
 	github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883

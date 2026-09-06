@@ -1,3 +1,5 @@
+github.com/0magnet/calvin v0.0.0-20260905171945-6d046e156c9b h1:IeQT+KbjNUsfK4+dm4rP+0AMCy8RtlN7gR2bNSFp8V8=
+github.com/0magnet/calvin v0.0.0-20260905171945-6d046e156c9b/go.mod h1:SrNaZcBbV8Ro28LlUQZak8rAtayeyQ0Snm2VJ3ryAXY=
 github.com/0magnet/coloredcobra v1.0.2 h1:HmKUcBcpBpbdPv03XyIfH8iMOIG2TDQIkx3GLWGbtf4=
 github.com/0magnet/coloredcobra v1.0.2/go.mod h1:LuB8WMJUz/OsbiFXZnUEtHnpt112tBTZiUTiuAotXoY=
 github.com/NYTimes/gziphandler v1.1.1 h1:ZUDjpQae29j0ryrS0u/B8HZfJBtBQHjqw2rQ2cqUQ3I=

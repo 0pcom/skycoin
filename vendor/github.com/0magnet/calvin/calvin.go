@@ -1,10 +1,6 @@
+// Package calvin calvin.go
 /*
-Package calvin src/util/calvin/calvin.go
-convert text to ascii art font i.e.:
-go run github.com/skycoin/skywire/pkg/skywire-utilities/calvin/cmd/calvin@develop convert text to ascii art font
-┌─┐┌─┐┌┐┌┬  ┬┌─┐┬─┐┌┬┐  ┌┬┐┌─┐─┐ ┬┌┬┐  ┌┬┐┌─┐  ┌─┐┌─┐┌─┐┬┬  ┌─┐┬─┐┌┬┐  ┌─┐┌─┐┌┐┌┌┬┐
-│  │ ││││└┐┌┘├┤ ├┬┘ │    │ ├┤ ┌┴┬┘ │    │ │ │  ├─┤└─┐│  ││  ├─┤├┬┘ │   ├┤ │ ││││ │
-└─┘└─┘┘└┘ └┘ └─┘┴└─ ┴    ┴ └─┘┴ └─ ┴    ┴ └─┘  ┴ ┴└─┘└─┘┴┴  ┴ ┴┴└─ ┴   └  └─┘┘└┘ ┴
+convert text to ascii art
 */
 package calvin
 
@@ -80,24 +76,100 @@ var boxFont = map[rune][]string{
 	',': {` `, ` `, `┘`},
 	'.': {` `, ` `, `o`},
 	'?': {`┌─┐`, ` ┌┘`, ` o `},
+	'[': {`┌─`, `│ `, `└─`},
+	']': {`─┐`, ` │`, `─┘`},
 	' ': {`  `, `  `, `  `},
+
+	// Digits are an extension: Calvin S itself defines no glyphs for 0-9, so
+	// patorjk.com/software/taag renders them as nothing. These follow the
+	// font's lowercase style — light box-drawing, three rows, three columns —
+	// and are shaped to stay distinct from the letters they most resemble:
+	// 0 is barred so it does not read as o, 8 closes its lower bowl where a
+	// has feet, and 2 keeps a flat base against z's closed one.
+	'0': {`┌─┐`, `│││`, `└─┘`},
+	'1': {` ┐ `, ` │ `, `─┴─`},
+	'2': {`┌─┐`, `┌─┘`, `└──`},
+	'3': {`┌─┐`, ` ─┤`, ` ─┘`},
+	'4': {`┬ ┬`, `└─┤`, `  ┴`},
+	'5': {`┌──`, `└─┐`, `└─┘`},
+	'6': {`┌─ `, `├─┐`, `└─┘`},
+	'7': {`──┐`, ` ┌┘`, ` ┴ `},
+	'8': {`┌─┐`, `├─┤`, `└─┘`},
+	'9': {`┌─┐`, `└─┤`, ` ─┘`},
+
+	// Punctuation the reference font also lacks, in the same spirit as the
+	// digits above. The slashes use ASCII, as ^ and * already do.
+	'(':  {`┌`, `│`, `└`},
+	')':  {`┐`, `│`, `┘`},
+	':':  {` `, `o`, `o`},
+	';':  {` `, `o`, `┘`},
+	'\'': {`│`, ` `, ` `},
+	'"':  {`││`, `  `, `  `},
+	'/':  {`  /`, ` / `, `/  `},
+	'\\': {`\  `, ` \ `, `  \`},
+
+	// Braces are the brackets plus a notch: ┤ juts left, ├ juts right. Two
+	// columns wide, so { lines up with the [ it has to sit beside.
+	'{': {`┌─`, `┤ `, `└─`},
+	'}': {`─┐`, ` ├`, `─┘`},
+	'|': {`│`, `│`, `│`},
+
+	// Both sit on the middle row, where - already lives. = takes the double
+	// line the capitals use, which is what an equals sign is anyway.
+	'+': {`   `, `─┼─`, `   `},
+	'=': {`   `, `═══`, `   `},
+
+	// Diagonals stepped into right angles, the way v and x already are. The
+	// open third column mirrors how c and e are drawn.
+	'<': {` ┌─`, `┌┘ `, `└──`},
+	'>': {`─┐ `, ` └┐`, `──┘`},
+	'~': {`    `, `┌─┐ `, `  └┘`},
+
+	// ' is an upright tick, so ` leans, as / and \ do.
+	'`': {`\ `, `  `, `  `},
 }
 
-// AsciiFont converts a string to box drawing characters.
-//
-//nolint:revive
-func AsciiFont(input string) string {
-	var output [3]string
+// glyphRows is the height of every glyph in the font.
+const glyphRows = 3
 
-	for _, char := range input {
-		if row, ok := boxFont[char]; ok {
-			for i := 0; i < len(row); i++ {
-				output[i] += row[i]
+// tabWidth is how many spaces a tab expands to before rendering, since the
+// font has no tab glyph.
+const tabWidth = 4
+
+// AsciiFont renders text in the Calvin S box-drawing font.
+//
+// Each line of the input becomes its own three-row block, so multi-line input
+// renders as multi-line output. Line endings may be "\n", "\r\n" or "\r", and
+// tabs expand to spaces. A single trailing newline is ignored, since piped
+// input almost always ends with one and would otherwise render an empty block.
+//
+// Characters the font does not define are skipped. That matches the reference
+// implementation at patorjk.com/software/taag — note in particular that
+// Calvin S defines no digits, so "2026" renders as nothing at all.
+func AsciiFont(input string) string {
+	input = strings.ReplaceAll(input, "\r\n", "\n")
+	input = strings.ReplaceAll(input, "\r", "\n")
+	input = strings.ReplaceAll(input, "\t", strings.Repeat(" ", tabWidth))
+	input = strings.TrimSuffix(input, "\n")
+
+	lines := strings.Split(input, "\n")
+	output := make([]string, 0, len(lines)*glyphRows)
+
+	for _, line := range lines {
+		var rows [glyphRows]string
+		for _, char := range line {
+			glyph, ok := boxFont[char]
+			if !ok {
+				continue
+			}
+			for i := range rows {
+				rows[i] += glyph[i]
 			}
 		}
+		output = append(output, rows[:]...)
 	}
 
-	return strings.Join(output[:], "\n")
+	return strings.Join(output, "\n")
 }
 
 var charMap = map[rune]string{
@@ -115,7 +187,7 @@ var charMap = map[rune]string{
 	'5': "𝟝", '6': "𝟞", '7': "𝟟", '8': "𝟠", '9': "𝟡",
 }
 
-// BlackboardBold converts a string to the blackboard bold character set shown above
+// BlackboardBold converts a string
 func BlackboardBold(input string) string {
 	var result strings.Builder
 	for _, ch := range input {

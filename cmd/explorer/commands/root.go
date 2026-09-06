@@ -15,10 +15,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/0magnet/calvin"
 	"github.com/NYTimes/gziphandler"
 	"github.com/spf13/cobra"
-
-	"github.com/skycoin/skycoin/src/util/calvin"
 
 	"github.com/skycoin/skycoin/explorer"
 	"github.com/skycoin/skycoin/src/fiber"

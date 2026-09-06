@@ -14,9 +14,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/0magnet/calvin"
 	"github.com/spf13/cobra"
-
-	"github.com/skycoin/skycoin/src/util/calvin"
 
 	"github.com/skycoin/skycoin/src/btc"
 	"github.com/skycoin/skycoin/src/cipher/bip44"
